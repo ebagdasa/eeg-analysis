@@ -1,0 +1,5 @@
+{
+    "DATA_DIR":"data\\TUH",
+    "PHASE":"train",
+    "EEG_RECORD_TYPE":"01_tcp_ar"
+}

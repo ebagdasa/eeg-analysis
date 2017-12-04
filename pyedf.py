@@ -4,10 +4,11 @@
 pyedf.py
 Created by Ray Slakinski on 2010-09-14.
 Copyright (c) 2010 Ray Slakinski. All rights reserved.
+Copyright (c) 2017 Ivan Chernenky.
 """
 import sys
 import argparse
-import re
+import os
 import struct
 import numpy as np
 
@@ -32,6 +33,8 @@ class EDFObject:
         self.raw=self.read_raw_records(self.__file)
 
         self.converted = self.convert_records_to_phys(self.raw)
+        self.converted = self.rearrange_arrays(self.converted)
+
 
 
 
@@ -99,6 +102,7 @@ class EDFObject:
         return records
 
     def convert_records_to_phys(self,raw_records):
+
         signals =[]
         for (i, record_samples) in enumerate(raw_records):
             signal=[]
@@ -109,3 +113,10 @@ class EDFObject:
             signals.append(signal)
 
         return signals
+
+    def rearrange_arrays(self,array):
+        result=[]
+        for i,label in enumerate(self.header['label']):
+           rearrange_array = np.concatenate([array[j][i] for j in range(len(array))])
+           result.append(rearrange_array)
+        return result
