@@ -1,0 +1,4 @@
+/**/*.pyc
+EEG
+*.csv
+data

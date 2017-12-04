@@ -1,0 +1,8 @@
+numpy
+snap 
+matplotlib
+scipy
+cvxpy
+pandas
+multiprocessing
+sklearn
