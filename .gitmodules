@@ -1,6 +1,3 @@
 [submodule "TICC"]
 	path = TICC
 	url = https://github.com/davidhallac/TICC.git
-[submodule "edfrw"]
-	path = edfrw
-	url = https://github.com/antgon/edfrw.git
