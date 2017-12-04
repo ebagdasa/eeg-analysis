@@ -89,16 +89,25 @@ class EDFObject:
         rec_pos = 0
         
         records=[]
+        # print data[rec_pos:32*self.header['num_signals']]
         #offset reserved space to data records
         rec_pos += 32*self.header['num_signals']
-        for record_index in range(self.header['num_items']):
+        byte_sum=0
+        for i in self.header['number_samples'] :
+            byte_sum += i
+        print '{} row size'.format(2*byte_sum)
+        for record_index in range(self.header['num_items']-1):
             record=[]
             for i,num_samples in enumerate(self.header['number_samples']):
+                # print 'sample - {}  {}\{} record_index - {}\{}'.format(num_samples,rec_pos,file_obj.tell(),record_index,self.header['num_items'])
                 ints = np.fromstring(data[rec_pos:rec_pos + 2*num_samples], dtype=np.dtype(np.int16))
                 rec_pos +=2*num_samples
                 record.append(ints)
             records.append(record)
-
+            # if record_index>1259:
+            #     break
+        for record in records:
+            assert len(record)==len(self.header['number_samples']),'{} record length is not equal to num_samples'.format(len(record))
         return records
 
     def convert_records_to_phys(self,raw_records):

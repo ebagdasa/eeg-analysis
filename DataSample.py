@@ -3,6 +3,7 @@ import os
 import re
 import json
 from pyedf import EDFObject
+import numpy as np
 
 class DataSample:
 
@@ -13,11 +14,24 @@ class DataSample:
             self.PHASE=j["PHASE"]
             self.EEG_RECORD_TYPE=j["EEG_RECORD_TYPE"]
             self.FULL_DATA_PATH=os.path.join(self.DATA_DIR,self.PHASE,self.EEG_RECORD_TYPE)
+            self.PATIENT_ID=PatientId
+            self.SESSION=Session
+            self.FILENAME=FileName
         
         with open(os.path.join(self.FULL_DATA_PATH,PatientId,Session,FileName),'rb') as f:
             self.EdfObject = EDFObject(f)
         self.Annotations = EdfAnnotation(os.path.join(self.FULL_DATA_PATH,PatientId,Session), FileName)
-
+   
+    def save_to_file(self):
+        arrays_to_save=[]
+        for i,label in enumerate(self.EdfObject.header['label']):
+            if 'EEG' in label:
+               arrays_to_save.append(self.EdfObject.converted[i]) 
+        array = np.asarray(arrays_to_save)
+        array =array.transpose()
+        with open(os.path.join('data',self.FILENAME+'.txt'),'w') as f:
+            np.savetxt(f,array,delimiter=',')
+        return self.FILENAME+'.txt'
 class EdfAnnotation:
     #Time-synchronous event (TSE) files use a simple format that looks like this:
     #  0.0000 490.0000 bckg 1.0000

@@ -1,5 +1,6 @@
 /**/*.pyc
 EEG
+data/TUH
+data/*.txt
 *.csv
-data
 .vscode
